@@ -1,5 +1,11 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ page import="java.sql.*"%>
+<% Class.forName("com.mysql.cj.jdbc.Driver"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +19,9 @@
   
 
 </head>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <body>
+<%@page import="com.procurement.*,java.util.*"%>
 <div class="container" align="center">
   <div class="jumbotron">
     <h1>Company name</h1>      
@@ -52,6 +60,41 @@
   
     <h3>Send RFQ to Vendors</h3>      
     
+    <% 
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/csse", "root", "123");
+
+            Statement statement = con.createStatement() ;
+            ResultSet resultset = statement.executeQuery("select * from rfq") ;
+              
+        %>
+    <table border="1" width="700px" cellpadding="1">  
+<th><b>Reg_No</b></th><th><b>Registered For</b></th><th><b>Reg_Dept</b></th><th><b>Reg_Title</b></th>
+  <th><b>Reg_Date</b></th><th><b>RegToal</b></th>
+   <th><b>Reg_Status</b></th><th><b> </b></th><th><b> </b></th>
+			<%
+				while (resultset.next()) {
+			%>
+			
+			
+			<tr>
+				
+				<td><%= resultset.getString(1) %></td>
+				<td><%= resultset.getString(2) %></td>
+				<td><%= resultset.getString(3) %></td>
+				<td><%= resultset.getString(4) %></td>
+				<td><%= resultset.getString(5) %></td>
+				<td><%= resultset.getString(6) %></td>
+				<td><%= resultset.getString(7) %></td>
+				<td><a href="ApprovedRFQServlet?id=<%=resultset.getString(1) %>">View More</a></td><td>
+				<%
+}
+%>
+				
+
+			</tr>
+
+		</table> 
+    
 </div>
 
 <div id="inputvendorqualification" class="tabcontent">
@@ -80,7 +123,6 @@ function openTab(evt, Tabname) {
   document.getElementById(Tabname).style.display = "block";
   evt.currentTarget.className += " active";
 }
-
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 </script>
